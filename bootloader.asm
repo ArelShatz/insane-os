@@ -1,25 +1,26 @@
 [org 0x7C00]
 [bits 16]
 
-start:
-    lea bx, [helloworld]
-    xor si, si
-    mov ah, 0x0E
 
-print_loop:
-    mov al, BYTE [bx+si]
-    cmp al, 0x00
-    je end
-    push bx
+push 0x0000
+pop ds
+
+load_kernel:
+    push 0x07E0
+    pop es
     xor bx, bx
-    int 0x10
-    pop bx
-    inc si
-    jmp print_loop
+    mov ax, 0x0201
+    mov cx, 0x0002
+    xor dh, dh
+    int 0x13
 
-end:
+    jc load_kernel  ;if loading failed try again
 
-helloworld db "Hello World", 0x0
+execute_kernel:
+    push 0x07E0
+    pop ds
 
-times 510 - ($-$$) db 0
+    jmp 0x07E0:0x0000
+
+times 510-($-$$) db 0
 dw 0xAA55
