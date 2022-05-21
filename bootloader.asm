@@ -2,8 +2,19 @@
 [bits 16]
 
 
-push 0x0000
-pop ds
+mov ax, 0x0000
+mov ds, ax
+
+cli
+mov ss, ax
+mov sp, 0x7C00
+sti
+
+reset_drive:
+    xor ax, ax
+    int 0x13
+
+    jc reset_drive
 
 load_kernel:
     push 0x07E0
