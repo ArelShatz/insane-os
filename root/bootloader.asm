@@ -1,7 +1,5 @@
 [org 0x7C00]
 [bits 16]
-
-
 mov ax, 0x0000
 mov ds, ax
 
@@ -17,9 +15,9 @@ reset_drive:
     jc reset_drive
 
 load_kernel:
-    push 0x07E0
+    push 0x0000
     pop es
-    xor bx, bx
+    mov bx, 0x7E00
     mov ax, 0x0201
     mov cx, 0x0002
     xor dh, dh
@@ -28,10 +26,15 @@ load_kernel:
     jc load_kernel  ;if loading failed try again
 
 execute_kernel:
-    push 0x07E0
-    pop ds
+    xor ax, ax
+    mov ds, ax
+    mov cs, ax
+    mov fs, ax
+    mov ss, ax
+    mov gs, ax
+    mov es, ax
 
-    jmp 0x07E0:0x0000
+    jmp 0x0000:0x7E00
 
 times 510-($-$$) db 0
 dw 0xAA55

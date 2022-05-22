@@ -10,7 +10,7 @@ print:
 print_str_loop:
     mov al, BYTE [bx+si]
     cmp al, 0x00
-    je end
+    je end_str
     push bx
     xor bx, bx
     int 0x10
@@ -21,7 +21,6 @@ print_str_loop:
 end_str:
     pop bp
     ret 2
-
 
 
 ;input: stack0 - hex buffer | output: none
